@@ -1,6 +1,6 @@
-importScripts("https://www.gstatic.com/firebasejs/7.2.1/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/7.2.1/firebase-messaging.js");
-importScripts("https://www.gstatic.com/firebasejs/7.2.1/firebase-analytics.js");
+importScripts("https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.7.0/firebase-messaging.js");
+
 //
 const config = {
     apiKey: "AIzaSyDaWHKw97ue_C6PhNuHlIOjNTC3rlaPeQ8",
@@ -16,15 +16,14 @@ firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler(payload => {
-  const notification = JSON.parse(payload.data.notification);
-  const notificationTitle = notification.title;
-  const notificationOptions = {
-    body: notification.body
-  };
-
-  return self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
-  );
+messaging.setBackgroundMessageHandler((payload)=>{
+    console.log('Получено уведомление:', payload);
+  
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+        body: payload.notification.body,
+        icon: payload.notification.icon ?? null
+    };
+  
+    return self.registration.showNotification(notificationTitle, notificationOptions);
 });
