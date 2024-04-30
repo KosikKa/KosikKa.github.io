@@ -1,11 +1,11 @@
 const config = {
-    apiKey: "AIzaSyDaWHKw97ue_C6PhNuHlIOjNTC3rlaPeQ8",
-    authDomain: "messa-a27d9.firebaseapp.com",
-    projectId: "messa-a27d9",
-    storageBucket: "messa-a27d9.appspot.com",
-    messagingSenderId: "291151785629",
-    appId: "1:291151785629:web:9fb2f3aa097082db6f2e74",
-    measurementId: "G-HSFBJRJFT6"
+    apiKey: "AIzaSyCtgaF_YzSrYXSOWIlS4qQPO3sIGwF0Gic",
+    authDomain: "maska-c8ab8.firebaseapp.com",
+    projectId: "maska-c8ab8",
+    storageBucket: "maska-c8ab8.appspot.com",
+    messagingSenderId: "183357275456",
+    appId: "1:183357275456:web:437c4fb81a04c168ddcea5",
+    measurementId: "G-9C7JF4Z33J"
   };
 
 firebase.initializeApp(config);

@@ -1,32 +1,49 @@
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <title>Entropy calculator</title>
+</head>
+<body>
     <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-messaging.js"></script>
-    <link rel="manifest" href="/manifest.json">
+    <script src="service_worker_registration.js"></script>
+
+    <div class="container">
+        <form id="calculator">
+        
+            <label for="input_field">Введите ваш пароль</label>
+            <input type="text" name="input_field" id="input_field">
     
+            <label for="result_field">Результат</label>
+            <output name="result_field" id="result_field">...</output>
+            
+            <button type="button" name="calculate_button" id="calculate_button">Рассчитать</button>
+    
+        </form>
+        
+    </div>
+
+    <div class="container notify_button_container">
+        <button type="button" id="notification_subscribe">Подписаться на уведомления</button>
+        <script src="push_request.js"></script>
+    </div>
+
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/firebase-messaging-sw.js').then(function(registration) {
-   console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, function(err) {
-            console.log('ServiceWorker registration failed: ', err);
-          });
+        navigator?.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
+        .then(() => {
+            console.log('Service Worker для Firebase Messaging зарегистрирован');
+        })
+        .catch((error) => {
+            console.error('Ошибка регистрации Service Worker для Firebase Messaging:', error);
         });
-      }
     </script>
 
-  </head>
-  <style>
-    div {
-      margin-bottom: 20px;
-      font-size: 20px;
-    }
-  </style>
-  <body>
-    <div id="token"></div>
-    <div id="message"></div>
-    <div id="error"></div>
-    <script src="index.js"></script>
-  </body>
+    <script src="symbols_information.js"></script>
+    <script src="validation.js"></script>
+    <script src="password_entropy_calculator.js"></script>
+</body>
 </html>
