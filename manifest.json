@@ -1,0 +1,16 @@
+{
+    "name": "Pwa psss",
+    "short_name": "PWA",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#000",
+    "description": "Description of your app",
+    "icons": [
+      {
+        "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4oMoZTAI38Qv8a0dbrptTIZPrkx5wN1lvc2MG5qBAWg&s",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
