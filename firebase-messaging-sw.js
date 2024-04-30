@@ -1,7 +1,8 @@
-importScripts('https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.7.0/firebase-messaging.js');
+importScripts("https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.7.0/firebase-messaging.js");
 
-const config = {
+//
+const firebaseConfig = {
     apiKey: "AIzaSyDaWHKw97ue_C6PhNuHlIOjNTC3rlaPeQ8",
     authDomain: "messa-a27d9.firebaseapp.com",
     projectId: "messa-a27d9",
@@ -10,7 +11,9 @@ const config = {
     appId: "1:291151785629:web:9fb2f3aa097082db6f2e74",
     measurementId: "G-HSFBJRJFT6"
   };
+
 firebase.initializeApp(config);
+
 const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler((payload)=>{
