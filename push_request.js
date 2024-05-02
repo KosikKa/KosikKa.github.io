@@ -11,17 +11,13 @@ const config = {
 firebase.initializeApp(config);
 const messaging = firebase.messaging();
 
-document.getElementById("notification_subscribe").addEventListener("click", async () => {
+async function getUserToken() {
+  try {
+    const token = await messaging.getToken();
+    document.getElementById("user_token").textContent = `Ваш токен: ${token}`;
+  } catch (error) {
+    console.error('Ошибка получения токена: ', error);
+  }
+}
 
-    await Notification.requestPermission();
-
-    if (Notification.permission === 'granted') {
-        await messaging.requestPermission();
-        const res = await navigator.permissions.query({ name: 'clipboard-write' });
-
-        if (res.state === "granted") {
-            const token = await messaging.getToken();
-            document.getElementById("user_token").textContent = `Ваш токен: ${token}`;
-        }
-    }
-});
+getUserToken();
