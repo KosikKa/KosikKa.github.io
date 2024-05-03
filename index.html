@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="/manifest.webmanifest">
   <title>Entropy calculator</title>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script src="/OneSignalSDKWorker.js" async></script>
 </head>
 <body>
   <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
@@ -30,45 +32,48 @@
   <div class="container notify_button_container">
     <button type="button" id="notification_subscribe">Подписаться на уведомления</button>
     <div id="user_token"></div>
-    <script>
-      // Проверяем, поддерживает ли браузер API уведомлений
-      if ('Notification' in window) {
-        // Проверяем, поддерживает ли браузер API push-уведомлений
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
-          // Регистрируем service worker
-          navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
-            .then(() => {
-              console.log('Service Worker для Firebase Messaging зарегистрирован');
-              // Получаем токен устройства
-              const messaging = firebase.messaging();
-              messaging.getToken({ vapidKey: 'ВАШ_PUBLIC_VAPID_KEY' })
-                .then((currentToken) => {
-                  if (currentToken) {
-                    // Выводим токен устройства на экран
-                    document.getElementById('user_token').textContent = 'Ваш токен: ' + currentToken;
-                  } else {
-                    // Выводим сообщение об ошибке на экран
-                    document.getElementById('user_token').textContent = 'Не удалось получить токен устройства. Пользователь отклонил разрешение на уведомления.';
-                  }
-                })
-                .catch((error) => {
-                  // Выводим сообщение об ошибке на экран
-                  document.getElementById('user_token').textContent = 'Ошибка при получении токена устройства: ' + error;
-                });
-            })
-            .catch((error) => {
-              console.error('Ошибка регистрации Service Worker для Firebase Messaging:', error);
-            });
-        } else {
-          // Выводим сообщение об ошибке на экран
-          document.getElementById('user_token').textContent = 'Браузер не поддерживает API push-уведомлений.';
-        }
-      } else {
-        // Выводим сообщение об ошибке на экран
-        document.getElementById('user_token').textContent = 'Браузер не поддерживает API уведомлений.';
-      }
-    </script>
+    <script src="push_request.js"></script>
   </div>
+
+  <script>
+    // Замените 'YOUR_ONESIGNAL_APP_ID' на ваш OneSignal App ID
+    const onesignalAppId = '0036313c-0523-4f29-920f-6788372b9991';
+
+    // Замените 'YOUR_ONESIGNAL_REST_API_KEY' на ваш OneSignal Rest API Key
+    const onesignalRestApiKey = 'ZDBhZDY1YmMtN2RhOC00NmJkLWJhYjMtNDFlNTkxOWQyZTZm';
+
+    // Инициализация OneSignal SDK
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: onesignalAppId,
+        autoRegister: false,
+        welcomeNotification: {
+          title: "Welcome!",
+          message: "Thanks for subscribing to our push notifications!"
+        }
+      });
+
+      // Получение токена устройства
+      OneSignal.getUserId(function(userId) {
+        document.getElementById("user_token").textContent = userId;
+      });
+
+      // Обработчик события для кнопки подписки на push-уведомления
+      document.getElementById("notification_subscribe").addEventListener("click", function() {
+        OneSignal.push(function() {
+          OneSignal.registerForPushNotifications();
+        });
+      });
+    });
+
+    // Обработчик события для получения push-уведомлений
+    OneSignal.push(function() {
+      OneSignal.on('notificationReceived', function(notification) {
+        console.log('Received notification:', notification);
+      });
+    });
+  </script>
 
   <script src="symbols_information.js"></script>
   <script src="validation.js"></script>
