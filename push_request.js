@@ -11,49 +11,37 @@ const config = {
 firebase.initializeApp(config);
 const messaging = firebase.messaging();
 
-document.addEventListener("DOMContentLoaded", async () => {
-  if (Notification.permission !== 'granted') {
-    messaging.requestPermission()
-      .then(() => {
-        console.log('Разрешение на уведомления предоставлено.');
-        fetchAndDisplayToken();
-      })
-      .catch((error) => {
-        console.error('Не удалось получить разрешение на уведомления.', error);
-      });
+// Запрашиваем разрешение на получение уведомлений при загрузке страницы
+messaging.requestPermission()
+.then(() => {
+  console.log('Разрешение на уведомления предоставлено.');
+  getToken();
+})
+.catch((error) => {
+  console.error('Не удалось получить разрешение на уведомления.', error);
+});
+
+// Функция для получения токена устройства
+function getToken() {
+messaging.getToken().then((currentToken) => {
+  if (currentToken) {
+    console.log('Токен получен:', currentToken);
+    document.getElementById('user_token').textContent = currentToken;
   } else {
-    fetchAndDisplayToken();
+    console.log('Не удалось получить токен. Пользователь отклонил разрешение на уведомления.');
   }
+}).catch((error) => {
+  console.error('Ошибка при получении токена: ', error);
 });
-
-messaging.onTokenRefresh(() => {
-  fetchAndDisplayToken();
-});
-
-document.getElementById("notification_subscribe").addEventListener("click", async () => {
-  if (Notification.permission === 'granted') {
-    await messaging.requestPermission();
-    const res = await navigator.permissions.query({ name: 'clipboard-write' });
-
-    if (res.state === "granted") {
-      try {
-        const token = await messaging.getToken();
-        await navigator.clipboard.writeText(token);
-        document.getElementById("user_token").textContent = `Ваш токен: ${token}`;
-      } catch (error) {
-        console.error('Ошибка при получении токена: ', error);
-      }
-    }
-  } else {
-    console.log('Уведомления не разрешены.');
-  }
-});
-
-async function fetchAndDisplayToken() {
-  try {
-    const token = await messaging.getToken();
-    document.getElementById("user_token").textContent = `Ваш токен: ${token}`;
-  } catch (error) {
-    console.error('Ошибка при получении токена: ', error);
-  }
 }
+
+// Обработчик события нажатия на кнопку "Подписаться на уведомления"
+document.getElementById("notification_subscribe").addEventListener("click", async () => {
+try {
+  const token = await messaging.getToken();
+  await navigator.clipboard.writeText(token);
+  console.log('Токен скопирован в буфер обмена:', token);
+} catch (error) {
+  console.error('Ошибка при копировании токена в буфер обмена:', error);
+}
+});
