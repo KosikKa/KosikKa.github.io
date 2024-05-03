@@ -30,18 +30,45 @@
   <div class="container notify_button_container">
     <button type="button" id="notification_subscribe">Подписаться на уведомления</button>
     <div id="user_token"></div>
-    <script src="push_request.js"></script>
+    <script>
+      // Проверяем, поддерживает ли браузер API уведомлений
+      if ('Notification' in window) {
+        // Проверяем, поддерживает ли браузер API push-уведомлений
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+          // Регистрируем service worker
+          navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
+            .then(() => {
+              console.log('Service Worker для Firebase Messaging зарегистрирован');
+              // Получаем токен устройства
+              const messaging = firebase.messaging();
+              messaging.getToken({ vapidKey: 'ВАШ_PUBLIC_VAPID_KEY' })
+                .then((currentToken) => {
+                  if (currentToken) {
+                    // Выводим токен устройства на экран
+                    document.getElementById('user_token').textContent = 'Ваш токен: ' + currentToken;
+                  } else {
+                    // Выводим сообщение об ошибке на экран
+                    document.getElementById('user_token').textContent = 'Не удалось получить токен устройства. Пользователь отклонил разрешение на уведомления.';
+                  }
+                })
+                .catch((error) => {
+                  // Выводим сообщение об ошибке на экран
+                  document.getElementById('user_token').textContent = 'Ошибка при получении токена устройства: ' + error;
+                });
+            })
+            .catch((error) => {
+              console.error('Ошибка регистрации Service Worker для Firebase Messaging:', error);
+            });
+        } else {
+          // Выводим сообщение об ошибке на экран
+          document.getElementById('user_token').textContent = 'Браузер не поддерживает API push-уведомлений.';
+        }
+      } else {
+        // Выводим сообщение об ошибке на экран
+        document.getElementById('user_token').textContent = 'Браузер не поддерживает API уведомлений.';
+      }
+    </script>
   </div>
-
-  <script>
-    navigator?.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
-      .then(() => {
-        console.log('Service Worker для Firebase Messaging зарегистрирован');
-      })
-      .catch((error) => {
-        console.error('Ошибка регистрации Service Worker для Firebase Messaging:', error);
-      });
-  </script>
 
   <script src="symbols_information.js"></script>
   <script src="validation.js"></script>
