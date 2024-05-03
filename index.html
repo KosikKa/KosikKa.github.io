@@ -1,86 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="/manifest.webmanifest">
-    <title>Entropy calculator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <title>Entropy calculator</title>
 </head>
 <body>
-    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-messaging.js"></script>
-    <script src="service_worker_registration.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-messaging.js"></script>
+  <script src="service_worker_registration.js"></script>
 
-    <div class="container">
-        <form id="calculator">
+  <div class="container">
+    <form id="calculator">
 
-            <label for="input_field">Введите ваш пароль</label>
-            <input type="text" name="input_field" id="input_field">
+      <label for="input_field">Введите ваш пароль</label>
+      <input type="text" name="input_field" id="input_field">
 
-            <label for="result_field">Результат</label>
-            <output name="result_field" id="result_field">...</output>
+      <label for="result_field">Результат</label>
+      <output name="result_field" id="result_field">...</output>
 
-            <button type="button" name="calculate_button" id="calculate_button">Рассчитать</button>
+      <button type="button" name="calculate_button" id="calculate_button">Рассчитать</button>
 
-        </form>
+    </form>
 
-    </div>
+  </div>
 
-    <div class="container notify_button_container">
-        <button type="button" id="notification_subscribe">Подписаться на уведомления</button>
-        <div id="user_token"></div>
-        <script src="push_request.js"></script>
-    </div>
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="style.css">
-      <link rel="manifest" href="/manifest.webmanifest">
-      <title>Entropy calculator</title>
-    </head>
-    <body>
-      <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-messaging.js"></script>
-      <script src="service_worker_registration.js"></script>
-    
-      <div class="container">
-        <form id="calculator">
-          <label for="input_field">Введите ваш пароль</label>
-          <input type="text" name="input_field" id="input_field">
-    
-          <label for="result_field">Результат</label>
-          <output name="result_field" id="result_field">...</output>
-    
-          <button type="button" name="calculate_button" id="calculate_button">Рассчитать</button>
-        </form>
-      </div>
-    
-      <div class="container notify_button_container">
-        <p id="token-display"></p>
-      </div>
-    
-      <script src="push_request.js"></script>
-      <script src="symbols_information.js"></script>
-      <script src="validation.js"></script>
-      <script src="password_entropy_calculator.js"></script>
-    </body>
-    </html>
-    
-    <script>
-        navigator?.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
-        .then(() => {
-            console.log('Service Worker для Firebase Messaging зарегистрирован');
-        })
-        .catch((error) => {
-            console.error('Ошибка регистрации Service Worker для Firebase Messaging:', error);
-        });
-    </script>
+  <div class="container notify_button_container">
+    <button type="button" id="notification_subscribe">Подписаться на уведомления</button>
+    <div id="user_token"></div>
+    <script src="push_request.js"></script>
+  </div>
 
-    <script src="symbols_information.js"></script>
-    <script src="validation.js"></script>
-    <script src="password_entropy_calculator.js"></script>
+  <script>
+    navigator?.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
+      .then(() => {
+        console.log('Service Worker для Firebase Messaging зарегистрирован');
+      })
+      .catch((error) => {
+        console.error('Ошибка регистрации Service Worker для Firebase Messaging:', error);
+      });
+  </script>
+
+  <script src="symbols_information.js"></script>
+  <script src="validation.js"></script>
+  <script src="password_entropy_calculator.js"></script>
 </body>
 </html>
