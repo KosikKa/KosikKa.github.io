@@ -1,24 +1,59 @@
 const config = {
-  apiKey: "AIzaSyDaWHKw97ue_C6PhNuHlIOjNTC3rlaPeQ8",
-  authDomain: "messa-a27d9.firebaseapp.com",
-  projectId: "messa-a27d9",
-  storageBucket: "messa-a27d9.appspot.com",
-  messagingSenderId: "291151785629",
-  appId: "1:291151785629:web:9fb2f3aa097082db6f2e74",
-  measurementId: "G-HSFBJRJFT6"
+  apiKey: "AIzaSyCtgaF_YzSrYXSOWIlS4qQPO3sIGwF0Gic",
+  authDomain: "maska-c8ab8.firebaseapp.com",
+  projectId: "maska-c8ab8",
+  storageBucket: "maska-c8ab8.appspot.com",
+  messagingSenderId: "183357275456",
+  appId: "1:183357275456:web:437c4fb81a04c168ddcea5",
+  measurementId: "G-9C7JF4Z33J"
 };
 
 firebase.initializeApp(config);
 const messaging = firebase.messaging();
 
-// Удалить слушатель события кнопки
-// document.getElementById("notification_subscribe").removeEventListener("click", async () => { ... });
+document.addEventListener("DOMContentLoaded", async () => {
+  if (Notification.permission !== 'granted') {
+    messaging.requestPermission()
+      .then(() => {
+        console.log('Разрешение на уведомления предоставлено.');
+        fetchAndDisplayToken();
+      })
+      .catch((error) => {
+        console.error('Не удалось получить разрешение на уведомления.', error);
+      });
+  } else {
+    fetchAndDisplayToken();
+  }
+});
 
-// Получить токен при загрузке страницы
-await messaging.requestPermission();
-const token = await messaging.getToken();
-console.log("Полученный токен:", token);
+messaging.onTokenRefresh(() => {
+  fetchAndDisplayToken();
+});
 
-// Отобразить токен
-const tokenDisplayElement = document.getElementById("token-display");
-tokenDisplayElement.textContent = "Ваш токен: " + token;
+document.getElementById("notification_subscribe").addEventListener("click", async () => {
+  if (Notification.permission === 'granted') {
+    await messaging.requestPermission();
+    const res = await navigator.permissions.query({ name: 'clipboard-write' });
+
+    if (res.state === "granted") {
+      try {
+        const token = await messaging.getToken();
+        await navigator.clipboard.writeText(token);
+        document.getElementById("user_token").textContent = `Ваш токен: ${token}`;
+      } catch (error) {
+        console.error('Ошибка при получении токена: ', error);
+      }
+    }
+  } else {
+    console.log('Уведомления не разрешены.');
+  }
+});
+
+async function fetchAndDisplayToken() {
+  try {
+    const token = await messaging.getToken();
+    document.getElementById("user_token").textContent = `Ваш токен: ${token}`;
+  } catch (error) {
+    console.error('Ошибка при получении токена: ', error);
+  }
+}
